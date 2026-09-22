@@ -1,0 +1,37 @@
+---
+// Approved floral illustrations — final artwork, placed/scaled/cropped only.
+// Do not redraw, reinterpret, or generate new artwork here.
+interface Props {
+  name:
+    | 'daisy'
+    | 'daffodil'
+    | 'lily-of-the-valley'
+    | 'snowdrop'
+    | 'cosmos'
+    | 'poppy'
+    | 'bluebell'
+    | 'lonicera';
+}
+
+const { name } = Astro.props;
+---
+
+<img
+  src={`/assets/flowers/${name}.png`}
+  alt=""
+  aria-hidden="true"
+  loading="lazy"
+  decoding="async"
+  class="flower-image"
+/>
+
+<style>
+  .flower-image {
+    display: block;
+    width: auto;
+    height: 100%;
+    max-width: none;
+    pointer-events: none;
+    user-select: none;
+  }
+</style>

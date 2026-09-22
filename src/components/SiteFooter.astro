@@ -1,0 +1,100 @@
+---
+import { nav, site } from '../data/site';
+---
+
+<footer class="site-footer">
+  <div class="site-footer__inner site-frame">
+    <div class="site-footer__groups">
+      <div>
+        <p class="kicker">Contact</p>
+        <p class="site-footer__name">{site.name}</p>
+        <p class="site-footer__email"><a href={`mailto:${site.email}`}>{site.email}</a></p>
+        <p class="site-footer__note">
+          Senior UX Designer / Product Owner. Based in {site.location}.
+        </p>
+      </div>
+      <nav aria-label="Footer">
+        <ul>
+          {nav.map((item) => (
+            <li><a href={item.href}>{item.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--rule);
+    padding-block: var(--space-5);
+  }
+
+  .site-footer__groups {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .site-footer__name {
+    margin: 0.4rem 0 0.35rem;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 500;
+  }
+
+  .site-footer__email {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--step--1);
+  }
+
+  .site-footer nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0;
+  }
+
+  .site-footer a {
+    font-family: var(--font-sans);
+    font-size: var(--step--1);
+    text-decoration: none;
+  }
+
+  .site-footer a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  .site-footer__note {
+    margin: 0.9rem 0 0;
+    font-family: var(--font-sans);
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+
+  @media (min-width: 768px) {
+    .site-footer__groups {
+      grid-template-columns: 1.4fr 1fr;
+      align-items: start;
+    }
+  }
+
+  /*
+   * Centre the two-group composition (Contact + navigation) within the
+   * footer at desktop widths, same rail breakpoint and the same
+   * centred-wide formula used for the masthead and the media-wide
+   * case-study images: reading column + one rail's worth of extra width,
+   * distributed evenly rather than the content simply filling the full
+   * site-frame from the left gutter to the right gutter.
+   */
+  @media (min-width: 1100px) {
+    .site-footer__groups {
+      width: calc((var(--reading-w) + 100%) / 2 - var(--gutter));
+      margin-inline: auto;
+    }
+  }
+</style>

@@ -1,0 +1,191 @@
+---
+import Flower from '../components/decor/Flower.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="About"
+  description="About Lin Bele Jacobsen, senior UX designer and product owner."
+>
+  <main id="main" class="page-main">
+    <div class="page-grid about-page">
+      <div class="page-grid__reading about__copy">
+        <p class="kicker">About</p>
+        <div class="about__title-row">
+          <div class="about__decor" aria-hidden="true">
+            <Flower name="cosmos" />
+          </div>
+          <h1>Me until now</h1>
+        </div>
+        <p>
+          I love looking for ways to automate and simplify mundane boring chores, giving room for more rewarding tasks. My biggest passion is designing for users at work.
+        </p>
+        <p>
+          I am a senior UX/UI designer based in Norway, currently looking for a new position where I can create value.
+        </p>
+      </div>
+    </div>
+
+    <div class="page-grid about-more">
+      <div class="page-grid__reading prose">
+        <h2>Roles and methodology</h2>
+        <div class="fact-groups">
+          <div>
+            <h3>Roles</h3>
+            <ul class="roles-list">
+              <li>UI Designer</li>
+              <li>UX Designer</li>
+              <li>Agile Product Owner</li>
+              <li>Scrum Master</li>
+              <li>Web analyst</li>
+              <li>Agile Coach</li>
+              <li>Accessibility expert</li>
+              <li>Developer (outdated)</li>
+            </ul>
+          </div>
+        </div>
+        <h3>Passions</h3>
+        <p>
+          Learning new skills, user research, Agile, Figma design systems, accessibility, redesigning data heavy
+          complex tools, asynchronous work methods, travel and culture.
+        </p>
+
+        <h2>Work</h2>
+        <p>
+          I work for Vokser, a small but valuable company in Norway. I work as a UX lead - consultant — my clients
+          are mostly Norwegian and I do what I have done for the past 25 years. Designing easy-to-use digital tools
+          that make people's workday more efficient!
+        </p>
+
+        <h2>Design philosophy</h2>
+        <p>
+          When designing I will focus on creating simple, efficient and beautiful experiences that can be used by
+          all users. Reducing cognitive load wherever I can! After doing user testing for many years, I've met
+          users with sight and hearing disabilities, broken arms - young children, elderly and all in between. I
+          have also designed for senior experts working alongside newly hired juniors. I want to design and write
+          copy that is intuitive and easy to use for all of them!
+        </p>
+
+        <h2>Research repository</h2>
+        <p>
+          To keep things interesting I am adding new skills, currently focusing on building a system for storing
+          user research. Doing user research is expensive, often they sit vacant in a folder somewhere. Findings
+          are reusable across projects and products so it makes sense to preserve it and make it reusable! I am
+          also trying out AI to be able to find and combine user insights.
+        </p>
+
+        <h2>Mentor</h2>
+        <p>
+          Every week, during evenings I also volunteer as a mentor for UX Designers and Product managers. Helping
+          young designers find their footing and build an exciting career short- and long-term.
+        </p>
+        <p>
+          I've also done some local events - Figma Fridays - helping young designers be more collaborative and
+          efficient in Figma.
+        </p>
+
+        <figure>
+          <img
+            src="/assets/about/portrait.png"
+            alt="A woman in profile with her eyes closed, leaning against a tree trunk in a forest at golden hour, wearing a yellow jumper and a plaid scarf."
+            width="1920"
+            height="1272"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+
+        <h2>Personal</h2>
+        <p>
+          I probably have more hobbies than other people have socks. I love the ocean -&gt; Surfing, diving, open
+          water swimming, paddle boarding, and sailing. I do figure skating and free-heel skiing in winter. I have
+          a dog and love hiking forests, the countryside and mountains. I play the flute and love classical music.
+          Travelling has been a big part of my life, and Asia is always my first choice. During my summers I go
+          south to the French west coast for surfing.
+        </p>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .about-page {
+    row-gap: var(--space-4);
+  }
+
+  .about__title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    column-gap: 1.25rem;
+    row-gap: 0.5rem;
+  }
+
+  .about__decor {
+    flex-shrink: 0;
+    height: clamp(6rem, 13vw, 9rem);
+    pointer-events: none;
+  }
+
+  @media (max-width: 767px) {
+    .about__decor {
+      height: clamp(4.5rem, 20vw, 6rem);
+    }
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+
+  .about__copy p {
+    max-width: var(--reading-max);
+  }
+
+  .about-more {
+    margin-top: var(--space-5);
+  }
+
+  /*
+   * .prose h2 always carries its own 2.2em margin-top for section breaks
+   * further down the article. Here it's the first child, so that margin
+   * doesn't collapse away into .about-more's own margin-top (grid items
+   * are a margin-collapsing boundary) — it stacks on top of it instead,
+   * roughly doubling the gap above "Roles and methodology" compared to
+   * every other h2 break in this article. Zeroing it leaves .about-more's
+   * margin-top as the section's only separator.
+   */
+  .about-more .prose > h2:first-child {
+    margin-top: 0;
+  }
+
+  .fact-groups {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .fact-groups h3,
+  .prose h3 + p {
+    margin-top: 0;
+  }
+
+  .fact-groups ul {
+    margin: 0;
+    padding-left: 1.2em;
+  }
+
+  .roles-list {
+    columns: 2;
+    column-gap: var(--space-4);
+    max-width: 26rem;
+  }
+
+  .roles-list li {
+    break-inside: avoid;
+  }
+</style>
