@@ -30,13 +30,17 @@ const languageNames = { nb: 'Norsk', en: 'English' } as const;
       <ul>
         {
           nav.map((item) => {
+            // "page" for the page itself, "true" for its section (a case
+            // study sits inside Projects but isn't the Projects page).
             const current =
-              item.href.endsWith('/projects')
-                ? path === item.href || path.startsWith(`${item.href}/`)
-                : path === item.href;
+              path === item.href
+                ? 'page'
+                : item.href.endsWith('/projects') && path.startsWith(`${item.href}/`)
+                  ? 'true'
+                  : undefined;
             return (
               <li>
-                <a href={item.href} aria-current={current ? 'page' : undefined}>
+                <a href={item.href} aria-current={current}>
                   {item.label}
                 </a>
               </li>
@@ -72,11 +76,20 @@ const languageNames = { nb: 'Norsk', en: 'English' } as const;
   const header = document.querySelector('.site-header');
   const toggle = header?.querySelector('.menu-toggle');
 
-  if (toggle instanceof HTMLElement) toggle.addEventListener('click', () => {
-    const open = toggle.getAttribute('aria-expanded') === 'true';
-    toggle.setAttribute('aria-expanded', String(!open));
-    toggle.textContent = (open ? toggle.dataset.labelOpen : toggle.dataset.labelClose) ?? '';
-    header?.classList.toggle('menu-open', !open);
+  const setMenu = (open: boolean) => {
+    if (!(toggle instanceof HTMLElement)) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.textContent = (open ? toggle.dataset.labelClose : toggle.dataset.labelOpen) ?? '';
+    header?.classList.toggle('menu-open', open);
+  };
+
+  toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+
+  // Escape closes the open mobile menu and returns focus to its button.
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || toggle?.getAttribute('aria-expanded') !== 'true') return;
+    setMenu(false);
+    if (toggle instanceof HTMLElement) toggle.focus();
   });
 
   // Shadow only once content is scrolled underneath the sticky header.
@@ -142,15 +155,18 @@ const languageNames = { nb: 'Norsk', en: 'English' } as const;
     list-style: none;
   }
 
+  /* Padding keeps every menu target at least 24px tall (WCAG 2.5.8). */
   .nav a,
   .lang-switch a {
+    display: inline-block;
+    padding-block: 0.35rem;
     text-decoration: none;
     font-family: var(--font-sans);
     font-size: var(--step--1);
     letter-spacing: 0.04em;
   }
 
-  .nav a[aria-current='page'] {
+  .nav a[aria-current] {
     text-decoration: underline;
     text-underline-offset: 0.28em;
   }
@@ -169,7 +185,6 @@ const languageNames = { nb: 'Norsk', en: 'English' } as const;
     display: inline-flex;
     align-items: center;
     gap: 0.45em;
-    padding-block: 0.35rem;
     color: var(--ink-soft);
   }
 
@@ -206,7 +221,7 @@ const languageNames = { nb: 'Norsk', en: 'English' } as const;
     }
 
     .nav li + li {
-      margin-top: 0.85rem;
+      margin-top: 0.3rem;
     }
   }
 
