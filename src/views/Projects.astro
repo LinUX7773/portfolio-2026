@@ -17,7 +17,8 @@ const copy = {
     title: 'Prosjekter',
     description: 'UX-prosjekter av Lin Bele Jacobsen.',
     kicker: 'Arbeid',
-    intro: 'Jeg elsker å få kompliserte oppgaver til å føles overraskende enkle. Her er noen prosjekter der jeg fikk gjøre akkurat det.',
+    intro:
+      'Jeg elsker å finne kompliserte oppgaver som lar seg automatisere, slik at brukerne kan bruke mer tid på det som er gøy og gir høy verdi! Her er noen prosjekter der jeg fikk jobbe med akkurat det.',
   },
   en: {
     title: 'Projects',
@@ -39,10 +40,9 @@ const copy = {
 
       <div class="page-grid__reading list">
         {
-          projects.map(({ entry, slug }, index) => (
+          projects.map(({ entry, slug }) => (
             <ProjectRow
               href={localePath(lang, `/projects/${slug}`)}
-              index={index + 1}
               title={entry.data.title}
               summary={entry.data.summary}
               topics={entry.data.topics}

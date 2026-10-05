@@ -3,25 +3,19 @@ import { getLang, t } from '../i18n';
 
 interface Props {
   href: string;
-  index: number;
   title: string;
   summary: string;
   topics?: string[];
-  /** 2 on the projects page (under the H1), 3 on the homepage (under "Projects"). */
-  headingLevel?: 2 | 3;
 }
 
-const { href, index, title, summary, topics = [], headingLevel = 2 } = Astro.props;
-const Heading = headingLevel === 3 ? 'h3' : 'h2';
-const number = String(index).padStart(2, '0');
+const { href, title, summary, topics = [] } = Astro.props;
 const copy = t(getLang(Astro.url));
 ---
 
 <article class="project-row">
-  <span class="project-row__index" aria-hidden="true">{number}</span>
-  <Heading class="project-row__title">
+  <h2 class="project-row__title">
     <a href={href}>{title}</a>
-  </Heading>
+  </h2>
   <p class="project-row__summary">{summary}</p>
   {
     topics.length > 0 && (
@@ -38,7 +32,6 @@ const copy = t(getLang(Astro.url));
 
 <style>
   .project-row {
-    position: relative;
     border-top: 1px solid var(--rule);
     padding-block: 1.65rem;
   }
@@ -47,14 +40,6 @@ const copy = t(getLang(Astro.url));
     border-bottom: 1px solid var(--rule);
   }
 
-  .project-row__index {
-    display: block;
-    margin: 0 0 0.35rem;
-    font-family: var(--font-sans);
-    font-size: var(--step--1);
-    letter-spacing: 0.08em;
-    color: var(--ink-soft);
-  }
 
   .project-row__title {
     margin: 0;
@@ -107,12 +92,4 @@ const copy = t(getLang(Astro.url));
     color: var(--terracotta);
   }
 
-  @media (min-width: 1100px) {
-    .project-row__index {
-      position: absolute;
-      top: 0;
-      right: 100%;
-      margin: 0 1.25rem 0 0;
-    }
-  }
 </style>

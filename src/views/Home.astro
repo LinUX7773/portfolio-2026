@@ -1,8 +1,6 @@
 ---
-import ProjectRow from '../components/ProjectRow.astro';
 import Flower from '../components/decor/Flower.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getProjects } from '../data/projects';
 import { site } from '../data/site';
 import { localePath, t, type Lang } from '../i18n';
 
@@ -11,7 +9,6 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-const featured = (await getProjects(lang)).filter(({ entry }) => entry.data.featured);
 
 const copy = {
   nb: {
@@ -20,9 +17,9 @@ const copy = {
     portraitAlt:
       'Lin Bele Jacobsen smiler mot kamera og sitter i en mørk tretrapp med albuen på et trinn, i briller, svart genser og jeans.',
     selectedWork: 'Utvalgte prosjekter',
-    intro: 'Jeg elsker å få kompliserte oppgaver til å føles overraskende enkle. Her er noen prosjekter der jeg fikk gjøre akkurat det.',
-    viewProjects: 'Se flere av prosjektene mine',
-    projects: 'Prosjekter',
+    intro:
+      'Jeg elsker å finne kompliserte oppgaver som lar seg automatisere, slik at brukerne kan bruke mer tid på det som er gøy og gir høy verdi! Her er noen prosjekter der jeg fikk jobbe med akkurat det.',
+    viewProjects: 'Se prosjektene mine',
   },
   en: {
     description: 'Portfolio of Lin Bele Jacobsen, senior UX designer and product owner based in Norway.',
@@ -32,7 +29,6 @@ const copy = {
     selectedWork: 'Selected work',
     intro: 'I love making complicated tasks feel surprisingly easy. Here are a few projects where I got to do just that.',
     viewProjects: 'View some of my projects',
-    projects: 'Projects',
   },
 }[lang];
 ---
@@ -70,26 +66,6 @@ const copy = {
       </div>
       <div class="page-grid__rail-right intro__decor" aria-hidden="true">
         <Flower name="lonicera" />
-      </div>
-    </section>
-
-    <section class="work page-grid" aria-labelledby="work-heading">
-      <div class="page-grid__reading work__head">
-        <h2 id="work-heading">{copy.projects}</h2>
-      </div>
-      <div class="page-grid__reading work__list">
-        {
-          featured.map(({ entry, slug }, index) => (
-            <ProjectRow
-              href={localePath(lang, `/projects/${slug}`)}
-              index={index + 1}
-              title={entry.data.title}
-              summary={entry.data.summary}
-              topics={entry.data.topics}
-              headingLevel={3}
-            />
-          ))
-        }
       </div>
     </section>
   </main>
@@ -164,7 +140,7 @@ const copy = {
 
   .intro {
     row-gap: var(--space-5);
-    padding-block: var(--space-6) 3.3rem;
+    padding-block: var(--space-6);
     border-top: 1px solid var(--rule);
   }
 
@@ -190,24 +166,6 @@ const copy = {
   .intro a {
     font-family: var(--font-sans);
     font-size: var(--step--1);
-  }
-
-  .work {
-    row-gap: var(--space-4);
-    padding-block: 3.3rem var(--space-6);
-  }
-
-  .work__head {
-    display: grid;
-    gap: 0.75rem;
-  }
-
-  .work h2 {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: var(--step-3);
-    font-weight: 300;
-    letter-spacing: -0.01em;
   }
 
   @media (min-width: 768px) {
