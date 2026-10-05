@@ -46,17 +46,17 @@ const copy = {
           </div>
           <h1>{copy.heading}</h1>
         </div>
+        <figure class="media-float about__media">
+          <img
+            src="/assets/about/avila.jpg"
+            alt={copy.photoAlt}
+            width="1024"
+            height="1536"
+            decoding="async"
+          />
+        </figure>
         {copy.intro.map((paragraph) => <p>{paragraph}</p>)}
       </div>
-      <figure class="page-grid__rail-right about__media">
-        <img
-          src="/assets/about/avila.jpg"
-          alt={copy.photoAlt}
-          width="1024"
-          height="1536"
-          decoding="async"
-        />
-      </figure>
     </div>
 
     <div class="page-grid about-more">
@@ -230,35 +230,10 @@ const copy = {
     row-gap: var(--space-4);
   }
 
-  /*
-   * Same treatment as the homepage portrait: beside the intro with its
-   * bottom edge aligned to the last paragraph, here in the right rail so
-   * the intro text stays in the reading column. Below the rail breakpoint
-   * it follows the intro in the single column.
-   */
+  /* Level with the first intro paragraph, which keeps its 1em top margin. */
   .about__media {
-    width: min(100%, var(--reading-max));
-    margin: 0 auto;
-  }
-
-  .about__media img {
-    max-width: min(100%, 20rem);
-  }
-
-  @media (min-width: 1100px) {
-    .about__copy,
-    .about__media {
-      align-self: end;
-    }
-
-    .about__media {
-      width: auto;
-      margin: 0;
-    }
-
-    .about__media img {
-      max-width: min(100%, 19rem);
-    }
+    margin-top: 1em;
+    margin-bottom: 0;
   }
 
   .about__title-row {

@@ -109,26 +109,19 @@ const reviews = [
         </dl>
       </div>
 
-      <div class="page-grid__reading mentoring__intro">
+      <div class="page-grid__reading mentoring__body">
         <div class="prose">
           <h2>{copy.takeawaysHeading}</h2>
+          <figure class="media-float">
+            <img
+              src="/assets/mentoring/adplist-profile-card.png"
+              alt={copy.cardAlt}
+              width="1004"
+              height="770"
+              decoding="async"
+            />
+          </figure>
           <p>{copy.takeaways}</p>
-        </div>
-
-        <figure class="mentoring__card">
-          <img
-            src="/assets/mentoring/adplist-profile-card.png"
-            alt={copy.cardAlt}
-            width="1004"
-            height="770"
-            loading="lazy"
-            decoding="async"
-          />
-        </figure>
-      </div>
-
-      <div class="page-grid__reading mentoring__rest">
-        <div class="prose">
           {copy.rest1.map((paragraph) => <p>{paragraph}</p>)}
 
           <figure>
@@ -239,54 +232,13 @@ const reviews = [
     margin: 0.2rem 0 0;
     font-family: var(--font-display);
     font-size: var(--step-1);
-    font-weight: 500;
+    font-weight: 400;
   }
 
   /* Adds to the grid's row-gap so the meta strip sits one --section-gap
      above "My key takeaways". */
-  .mentoring__intro .prose {
+  .mentoring__body .prose {
     margin-top: calc(var(--section-gap) - var(--space-4));
-  }
-
-  /*
-   * Experimental placement: the contact card sits beside the first "My
-   * key takeaways" paragraph instead of inline in the reading column.
-   * At desktop it's taken out of flow (position: absolute, anchored to
-   * .mentoring__intro) so its own height never affects the row height —
-   * growing or shrinking the card can't push the rest of the page's
-   * content down, and the reading column's text isn't constrained by it
-   * either. Below the 1100px rail breakpoint there's no rail to float
-   * into, so it drops back into normal flow, stacked below the text.
-   */
-  .mentoring__intro {
-    position: relative;
-  }
-
-  .mentoring__card {
-    margin: 0;
-    width: 100%;
-    max-width: 14.04rem;
-  }
-
-  @media (min-width: 1100px) {
-    .mentoring__card {
-      position: absolute;
-      /* Aligns the card with the first paragraph: the .prose offset, one
-         line of H2 and the heading gap. */
-      top: calc(var(--section-gap) - var(--space-4) + var(--step-2) * 1.15 + var(--heading-gap));
-      left: calc(100% + var(--gutter));
-    }
-  }
-
-  /*
-   * Below the rail breakpoint the card drops into normal flow directly
-   * after .prose. .prose zeroes its children's bottom margins, so the
-   * card needs its own explicit spacing here.
-   */
-  @media (max-width: 1099px) {
-    .mentoring__card {
-      margin-top: var(--space-4);
-    }
   }
 
   @media (min-width: 500px) {

@@ -100,10 +100,11 @@ spacing, grid position, alignment, or colour where appropriate.
 
 ### Bold rule
 
-Only **one** heading per page may use a bold weight — normally the H1 /
-primary page heading. H2 and H3 should use thin, light, regular, or medium,
-depending on readability. Never let multiple headings on the same page
-compete through boldness.
+Never use bold (600 or heavier) anywhere — not for headings, emphasis
+(`<strong>`), labels or navigation. **Medium (500) is the heaviest weight
+on the site.** Headings use thin, light, regular, or medium, depending on
+readability. Inline emphasis uses medium. The fonts are loaded without
+weights above 500, so bold cannot appear by accident.
 
 ### Thin/light weights and accessibility
 

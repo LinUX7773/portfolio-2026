@@ -84,6 +84,22 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/*
+ * No bold anywhere: emphasis and headings top out at medium (500).
+ * Headings set their own lighter weights where they need them.
+ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+b,
+th {
+  font-weight: 500;
+}
+
 img,
 svg {
   max-width: 100%;
@@ -276,10 +292,51 @@ a:hover {
   margin-top: 0;
 }
 
+/*
+ * An image that sits inside the reading column with the text wrapping
+ * around it on the right. Below 640px there's no room for text beside
+ * it, so it stacks in the normal flow instead. Headings and other
+ * figures clear it so they never start beside the image.
+ */
+.media-float {
+  margin-inline: 0;
+  margin-bottom: 0;
+}
+
+.media-float img {
+  max-width: min(100%, 18rem);
+}
+
+.prose > :is(h2, h3, figure:not(.media-float)) {
+  clear: both;
+}
+
+@media (min-width: 640px) {
+  .media-float {
+    float: right;
+    width: clamp(10rem, 40%, 16rem);
+    margin: 0.3rem 0 var(--space-3) var(--space-4);
+  }
+
+  .media-float img {
+    max-width: 100%;
+  }
+
+  /* The text beside the image starts level with the image's top edge. */
+  .prose > .media-float + * {
+    margin-top: 0;
+  }
+
+  .prose > :is(h2, h3) + .media-float,
+  .prose > :is(h2, h3) + .media-float + * {
+    margin-top: var(--heading-gap);
+  }
+}
+
 .prose h2 {
   font-family: var(--font-display);
   font-size: var(--step-2);
-  font-weight: 500;
+  font-weight: 300;
   letter-spacing: -0.02em;
   line-height: 1.15;
 }
@@ -287,7 +344,7 @@ a:hover {
 .prose h3 {
   font-family: var(--font-display);
   font-size: var(--step-1);
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .prose p,

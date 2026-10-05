@@ -47,20 +47,18 @@ const copy = {
 
       <div class="page-grid__reading resume__intro">
         <div class="prose">
+          <figure class="media-float">
+            <img
+              src="/assets/resume/experience-chart.png"
+              alt={copy.chartAlt}
+              width="1402"
+              height="1638"
+              decoding="async"
+            />
+          </figure>
           <p>{copy.intro}</p>
         </div>
       </div>
-
-      <figure class="page-grid__rail-right resume__chart">
-        <img
-          src="/assets/resume/experience-chart.png"
-          alt={copy.chartAlt}
-          width="1402"
-          height="1638"
-          loading="lazy"
-          decoding="async"
-        />
-      </figure>
 
       <div class="page-grid__reading resume__rest">
         <div class="prose">
@@ -342,26 +340,6 @@ const copy = {
 
   .resume__intro .prose {
     margin-top: var(--space-5);
-  }
-
-  /*
-   * Experimental placement: the chart moves into the right rail beside
-   * the intro paragraph instead of sitting inline in the reading column.
-   * Below the 1100px rail breakpoint there's no rail to sit in, so it
-   * falls back to the single reading column like everything else, capped
-   * to a modest width rather than growing full-bleed.
-   */
-  .resume__chart {
-    margin: 0;
-    margin-top: var(--space-5);
-    width: 100%;
-    max-width: 12.5rem;
-  }
-
-  @media (max-width: 1099px) {
-    .resume__chart {
-      margin-top: 0;
-    }
   }
 
   .role-dates {
