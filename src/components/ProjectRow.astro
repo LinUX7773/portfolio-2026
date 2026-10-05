@@ -1,4 +1,6 @@
 ---
+import { getLang, t } from '../i18n';
+
 interface Props {
   href: string;
   index: number;
@@ -9,6 +11,7 @@ interface Props {
 
 const { href, index, title, summary, topics = [] } = Astro.props;
 const number = String(index).padStart(2, '0');
+const copy = t(getLang(Astro.url));
 ---
 
 <article class="project-row">
@@ -24,7 +27,7 @@ const number = String(index).padStart(2, '0');
   }
   <p class="project-row__cta">
     <a href={href}>
-      Read case study<span aria-hidden="true"> →</span>
+      {copy.readCaseStudy}<span aria-hidden="true"> →</span>
       <span class="visually-hidden"> — {title}</span>
     </a>
   </p>

@@ -1,29 +1,38 @@
 ---
-import { nav, site } from '../data/site';
+import LangFlag from './decor/LangFlag.astro';
+import { site } from '../data/site';
+import { getLang, languages, localePath, navItems, stripLang, t } from '../i18n';
 
+const lang = getLang(Astro.url);
+const copy = t(lang);
+const nav = navItems(lang);
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const pagePath = stripLang(Astro.url.pathname);
+const languageNames = { nb: 'Norsk', en: 'English' } as const;
 ---
 
 <header class="site-header">
   <div class="site-header__inner site-frame">
-    <a class="wordmark" href="/" aria-label={`${site.name}, home`}>{site.name}</a>
+    <a class="wordmark" href={localePath(lang, '/')} aria-label={`${site.name}, ${copy.home}`}>{site.name}</a>
 
     <button
       class="menu-toggle"
       type="button"
       aria-expanded="false"
-      aria-controls="primary-nav"
+      aria-controls="primary-nav language-nav"
+      data-label-open={copy.menu}
+      data-label-close={copy.close}
     >
-      Menu
+      {copy.menu}
     </button>
 
-    <nav class="nav" id="primary-nav" aria-label="Primary">
+    <nav class="nav" id="primary-nav" aria-label={copy.primaryNav}>
       <ul>
         {
           nav.map((item) => {
             const current =
-              item.href === '/projects'
-                ? path === '/projects' || path.startsWith('/projects/')
+              item.href.endsWith('/projects')
+                ? path === item.href || path.startsWith(`${item.href}/`)
                 : path === item.href;
             return (
               <li>
@@ -36,20 +45,44 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
         }
       </ul>
     </nav>
+
+    <nav class="lang-switch" id="language-nav" aria-label={copy.language}>
+      <ul>
+        {
+          languages.map((code) => (
+            <li>
+              <a
+                href={localePath(code, pagePath)}
+                hreflang={code}
+                lang={code}
+                aria-current={code === lang ? 'true' : undefined}
+              >
+                <LangFlag lang={code} />
+                {languageNames[code]}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
   </div>
 </header>
 
 <script>
   const header = document.querySelector('.site-header');
   const toggle = header?.querySelector('.menu-toggle');
-  const nav = header?.querySelector('#primary-nav');
 
-  toggle?.addEventListener('click', () => {
+  if (toggle instanceof HTMLElement) toggle.addEventListener('click', () => {
     const open = toggle.getAttribute('aria-expanded') === 'true';
     toggle.setAttribute('aria-expanded', String(!open));
-    toggle.textContent = open ? 'Menu' : 'Close';
-    nav?.classList.toggle('is-open', !open);
+    toggle.textContent = (open ? toggle.dataset.labelOpen : toggle.dataset.labelClose) ?? '';
+    header?.classList.toggle('menu-open', !open);
   });
+
+  // Shadow only once content is scrolled underneath the sticky header.
+  const updateScrolled = () => header?.classList.toggle('is-scrolled', window.scrollY > 0);
+  updateScrolled();
+  window.addEventListener('scroll', updateScrolled, { passive: true });
 </script>
 
 <style>
@@ -59,6 +92,11 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     z-index: 20;
     background: var(--paper);
     border-bottom: 1px solid var(--rule);
+    transition: box-shadow 0.2s ease;
+  }
+
+  .site-header.is-scrolled {
+    box-shadow: 0 6px 18px -8px rgb(29 25 21 / 0.22);
   }
 
   .site-header__inner {
@@ -97,13 +135,15 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     cursor: pointer;
   }
 
-  .nav ul {
+  .nav ul,
+  .lang-switch ul {
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .nav a {
+  .nav a,
+  .lang-switch a {
     text-decoration: none;
     font-family: var(--font-sans);
     font-size: var(--step--1);
@@ -115,19 +155,54 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     text-underline-offset: 0.28em;
   }
 
-  @media (max-width: 767px) {
+  /*
+   * Language switch: flag + language name (in its own language) for both
+   * options. The current language is marked with the same underline as
+   * the current page in the menu, not by colour alone.
+   */
+  .lang-switch ul {
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  .lang-switch a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    padding-block: 0.35rem;
+    color: var(--ink-soft);
+  }
+
+  .lang-switch a:hover {
+    color: var(--terracotta);
+  }
+
+  .lang-switch a[aria-current='true'] {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 0.28em;
+  }
+
+  @media (max-width: 1023px) {
     .site-header__inner {
       min-height: 3.5rem;
     }
 
-    .nav {
+    .nav,
+    .lang-switch {
       display: none;
       flex-basis: 100%;
-      padding-bottom: 1rem;
     }
 
-    .nav.is-open {
+    .menu-open .nav,
+    .menu-open .lang-switch {
       display: block;
+    }
+
+    .lang-switch {
+      margin-top: 0.25rem;
+      padding-block: 0.75rem 1rem;
+      border-top: 1px solid var(--rule);
     }
 
     .nav li + li {
@@ -135,13 +210,19 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     }
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     .menu-toggle {
       display: none;
     }
 
     .nav {
       display: block;
+      margin-left: auto;
+    }
+
+    .lang-switch {
+      padding-left: var(--space-3);
+      border-left: 1px solid var(--rule);
     }
 
     .nav ul {

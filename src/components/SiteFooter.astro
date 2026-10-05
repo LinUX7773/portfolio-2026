@@ -1,19 +1,26 @@
 ---
-import { nav, site } from '../data/site';
+import { site } from '../data/site';
+import { getLang, navItems, t } from '../i18n';
+
+const lang = getLang(Astro.url);
+const copy = t(lang);
+const nav = navItems(lang);
+
+// Lets the address wrap before the @ on narrow screens instead of
+// forcing the contact column wider than the space beside the menu.
+const [emailUser, emailDomain] = site.email.split('@');
 ---
 
 <footer class="site-footer">
   <div class="site-footer__inner site-frame">
     <div class="site-footer__groups">
       <div>
-        <p class="kicker">Contact</p>
+        <p class="kicker">{copy.contact}</p>
         <p class="site-footer__name">{site.name}</p>
-        <p class="site-footer__email"><a href={`mailto:${site.email}`}>{site.email}</a></p>
-        <p class="site-footer__note">
-          Senior UX Designer / Product Owner. Based in {site.location}.
-        </p>
+        <p class="site-footer__email"><a href={`mailto:${site.email}`}>{emailUser}<wbr />@{emailDomain}</a></p>
+        <p class="site-footer__note">{copy.footerNote}</p>
       </div>
-      <nav aria-label="Footer">
+      <nav aria-label={copy.footerNav}>
         <ul>
           {nav.map((item) => (
             <li><a href={item.href}>{item.label}</a></li>
@@ -30,9 +37,20 @@ import { nav, site } from '../data/site';
     padding-block: var(--space-5);
   }
 
+  /*
+   * Contact and menu sit side by side at every width: the menu column
+   * takes only the width its longest link needs, and the contact text
+   * wraps in the remaining space rather than pushing the menu below it.
+   */
   .site-footer__groups {
     display: grid;
-    gap: var(--space-4);
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: var(--space-3);
+  }
+
+  .site-footer__groups > div {
+    overflow-wrap: break-word;
   }
 
   .site-footer__name {
@@ -40,6 +58,7 @@ import { nav, site } from '../data/site';
     font-family: var(--font-display);
     font-size: var(--step-1);
     font-weight: 500;
+    line-height: 1.25;
   }
 
   .site-footer__email {
@@ -56,6 +75,7 @@ import { nav, site } from '../data/site';
     flex-direction: column;
     align-items: flex-end;
     gap: 0;
+    text-align: right;
   }
 
   .site-footer a {
@@ -79,7 +99,7 @@ import { nav, site } from '../data/site';
   @media (min-width: 768px) {
     .site-footer__groups {
       grid-template-columns: 1.4fr 1fr;
-      align-items: start;
+      gap: var(--space-4);
     }
   }
 

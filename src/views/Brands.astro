@@ -1,0 +1,242 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { localePath, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const nb = lang === 'nb';
+const link = (path: string) => localePath(lang, path);
+
+interface BrandItem {
+  name: string;
+  href?: string;
+}
+
+interface BrandGroup {
+  heading: string;
+  items: BrandItem[];
+}
+
+const copy = {
+  nb: {
+    title: 'Kunder og bransjer',
+    description: 'Virksomheter og organisasjoner Lin Bele Jacobsen har jobbet med, gruppert etter bransje.',
+    intro: 'Dette er virksomhetene jeg har hatt gleden av å jobbe med gjennom karrieren min.',
+  },
+  en: {
+    title: 'Brands & Industries',
+    description: 'Brands and organisations Lin Bele Jacobsen has worked with, grouped by industry.',
+    intro: 'These are the brands and companies I have had the privilege to work with along my career.',
+  },
+}[lang];
+
+const groups: BrandGroup[] = [
+  {
+    heading: nb ? 'Varehandel' : 'Retail',
+    items: [
+      { name: 'NorgesGruppen', href: link('/projects/the-grocer') },
+      { name: 'Asko' },
+      { name: 'Akademika' },
+    ],
+  },
+  {
+    heading: nb ? 'Logistikk' : 'Logistics',
+    items: [{ name: 'Bring' }, { name: nb ? 'Posten Norge' : 'Norwegian Post' }],
+  },
+  {
+    heading: nb ? 'Offentlig sektor' : 'Public sector / Government',
+    items: [
+      { name: nb ? 'Landbruksdirektoratet' : 'Directorate of Agriculture' },
+      {
+        name: nb ? 'Meteorologisk institutt' : 'Norwegian Meteorological Institute',
+        href: link('/projects/the-weather-in-malawi'),
+      },
+      { name: nb ? 'Posten Norge' : 'Norwegian Post' },
+      { name: nb ? 'Datatilsynet' : 'Norwegian Data Protection Authority (DPA)' },
+      { name: nb ? 'Skatteetaten' : 'Norwegian Tax Administration' },
+      {
+        name: nb
+          ? 'Malawis direktorat for klimaendringer og meteorologi (DCCMS)'
+          : 'The Department of Climate Change and Meteorological Services of Malawi',
+        href: link('/projects/the-weather-in-malawi'),
+      },
+    ],
+  },
+  {
+    heading: nb ? 'Utdanning og læring' : 'Education and learning',
+    items: [{ name: 'Pearson' }, { name: 'Fronter' }, { name: 'ADPList', href: link('/mentoring') }],
+  },
+  {
+    heading: nb ? 'Humanitære og ideelle organisasjoner' : 'Humanitarian organization / charity / NGOs',
+    items: [
+      { name: nb ? 'Røde Kors' : 'Red Cross' },
+      { name: nb ? 'Redd Barna' : 'Save the Children', href: link('/projects/the-weather-in-malawi') },
+      { name: 'Norcap' },
+      {
+        name: nb ? 'Verdens meteorologiorganisasjon (FN)' : 'World Meteorological Organization (UN)',
+        href: link('/projects/the-weather-in-malawi'),
+      },
+    ],
+  },
+  {
+    heading: nb ? 'Annet' : 'Other',
+    items: [
+      { name: '1881.no', href: link('/projects/car-owner') },
+      { name: 'VIRKE' },
+      { name: 'KPMG' },
+      { name: 'Trysilhus' },
+      { name: 'Vysus Group' },
+      { name: 'iSonen' },
+    ],
+  },
+  {
+    heading: nb ? 'IT-bransjen' : 'IT industry',
+    items: [
+      { name: 'Tieto Evry' },
+      { name: 'Buypass' },
+      { name: 'Syscom' },
+      { name: 'Bosch Global Software Technologies' },
+      { name: 'Kongsberg Digital' },
+      { name: 'Ness' },
+      { name: 'Experis' },
+      { name: 'Kantega' },
+      { name: 'Northern Beat' },
+      { name: 'Pureservice', href: link('/projects/service-management') },
+    ],
+  },
+  {
+    heading: nb ? 'Landbruk' : 'Farming',
+    items: [
+      { name: 'Mimiro', href: link('/projects/farmers') },
+      { name: nb ? 'Landbruksdirektoratet' : 'Directorate of Agriculture' },
+    ],
+  },
+  {
+    heading: nb ? 'Telekom' : 'Telecom',
+    items: [{ name: 'Telia' }],
+  },
+];
+---
+
+<BaseLayout title={copy.title} description={copy.description}>
+  <main id="main" class="page-main">
+    <div class="site-frame brand-page">
+      <h1>{copy.title}</h1>
+
+      <p class="brand-intro">{copy.intro}</p>
+
+      <div class="brand-wall">
+        {
+          groups.map((group) => (
+            <section class="brand-group" aria-labelledby={`group-${group.heading.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`}>
+              <h2 id={`group-${group.heading.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`}>{group.heading}</h2>
+              <ul>
+                {group.items.map((item) => (
+                  <li>
+                    {item.href ? <a href={item.href}>{item.name}</a> : item.name}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .brand-page {
+    padding-top: var(--space-3);
+  }
+
+  h1 {
+    max-width: 40rem;
+    margin: 0 auto;
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: var(--step-4);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    text-align: center;
+  }
+
+  .brand-wall {
+    column-gap: var(--space-6);
+    columns: 1;
+  }
+
+  .brand-group {
+    break-inside: avoid;
+    margin-bottom: var(--space-5);
+  }
+
+  .brand-group h2 {
+    margin: 0 0 var(--heading-gap);
+    font-family: var(--font-sans);
+    font-size: var(--step-0);
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .brand-group ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .brand-group li {
+    font-family: var(--font-sans);
+    font-size: var(--step--1);
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .brand-group a {
+    color: var(--ink-soft);
+    text-decoration-color: var(--rule);
+    text-underline-offset: 0.2em;
+  }
+
+  .brand-group a:hover,
+  .brand-group a:focus-visible {
+    color: var(--ink);
+    text-decoration-color: currentColor;
+  }
+
+  .brand-intro {
+    max-width: 28rem;
+    margin: var(--space-4) auto var(--space-6);
+    font-family: var(--font-sans);
+    font-size: var(--step-0);
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+
+  @media (min-width: 640px) {
+    .brand-wall {
+      columns: 2;
+    }
+  }
+
+  /*
+   * At large desktop, three columns read as one centred editorial block
+   * instead of spreading across the full page width: same centred-wide
+   * container formula used for the masthead, footer and the media-wide
+   * case-study images (reading column + one rail's worth of width,
+   * centred), rather than an arbitrary margin or transform.
+   */
+  @media (min-width: 1100px) {
+    .brand-wall {
+      columns: 3;
+      column-gap: var(--space-5);
+      width: calc((var(--reading-w) + 100%) / 2 - var(--gutter));
+      margin-inline: auto;
+    }
+  }
+</style>

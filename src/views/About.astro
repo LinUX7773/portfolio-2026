@@ -1,0 +1,329 @@
+---
+import Flower from '../components/decor/Flower.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const copy = {
+  nb: {
+    title: 'Om meg',
+    description: 'Om Lin Bele Jacobsen, senior UX-designer og Product Owner.',
+    heading: 'Meg så langt',
+    intro: [
+      'Jeg elsker å finne måter å automatisere og forenkle kjedelige rutineoppgaver på, så det blir mer rom for det som gir mening. Min største lidenskap er å designe for folk på jobb.',
+      'Jeg er senior UX/UI-designer i Norge, og ser nå etter en ny stilling der jeg kan skape verdi.',
+    ],
+    photoAlt:
+      'Lin Bele Jacobsen smiler mot kamera og sitter i en gul lenestol ved et bord med en laptop i en fargerik lounge, i briller, blåstripet skjorte, jeans og hvite joggesko.',
+  },
+  en: {
+    title: 'About',
+    description: 'About Lin Bele Jacobsen, senior UX designer and product owner.',
+    heading: 'Me until now',
+    intro: [
+      'I love looking for ways to automate and simplify mundane boring chores, giving room for more rewarding tasks. My biggest passion is designing for users at work.',
+      'I am a senior UX/UI designer based in Norway, currently looking for a new position where I can create value.',
+    ],
+    photoAlt:
+      'Lin Bele Jacobsen smiling at the camera, sitting in a yellow armchair beside a table with a laptop in a colourful lounge, wearing glasses, a striped blue shirt, jeans and white trainers.',
+  },
+}[lang];
+---
+
+<BaseLayout title={copy.title} description={copy.description}>
+  <main id="main" class="page-main">
+    <div class="page-grid about-page">
+      <div class="page-grid__reading about__copy">
+        <p class="kicker">{copy.title}</p>
+        <div class="about__title-row">
+          <div class="about__decor" aria-hidden="true">
+            <Flower name="cosmos" />
+          </div>
+          <h1>{copy.heading}</h1>
+        </div>
+        {copy.intro.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+      <figure class="page-grid__rail-right about__media">
+        <img
+          src="/assets/about/avila.jpg"
+          alt={copy.photoAlt}
+          width="1024"
+          height="1536"
+          decoding="async"
+        />
+      </figure>
+    </div>
+
+    <div class="page-grid about-more">
+      <div class="page-grid__reading prose">
+        {
+          lang === 'nb' ? (
+            <Fragment>
+              <h2>Roller og metodikk</h2>
+              <div class="fact-groups">
+                <div>
+                  <h3>Roller</h3>
+                  <ul class="roles-list">
+                    <li>UI-designer</li>
+                    <li>UX-designer</li>
+                    <li>Smidig Product Owner</li>
+                    <li>Scrum Master</li>
+                    <li>Webanalytiker</li>
+                    <li>Smidig coach</li>
+                    <li>Ekspert på universell utforming</li>
+                    <li>Utvikler (utdatert)</li>
+                  </ul>
+                </div>
+              </div>
+              <h3>Dette brenner jeg for</h3>
+              <p>
+                Å lære nye ting, brukerinnsikt, smidig arbeid, designsystemer i Figma, universell utforming, redesign av
+                komplekse og datatunge verktøy, asynkrone arbeidsmetoder, reising og kultur.
+              </p>
+
+              <h2>Jobb</h2>
+              <p>
+                Jeg jobber i Vokser, et lite, men verdifullt selskap i Norge. Der er jeg UX-lead og konsulent – kundene
+                mine er stort sett norske, og jeg gjør det jeg har gjort de siste 25 årene: designer brukervennlige
+                digitale verktøy som gjør arbeidsdagen mer effektiv!
+              </p>
+
+              <h2>Designfilosofi</h2>
+              <p>
+                Når jeg designer, er målet å skape enkle, effektive og vakre opplevelser som kan brukes av alle. Jeg
+                reduserer kognitiv belastning der jeg kan! Etter mange år med brukertester har jeg møtt brukere med
+                syns- og hørselsnedsettelser og brukne armer – små barn, eldre og alt imellom. Jeg har også designet for
+                erfarne eksperter som jobber side om side med nyansatte juniorer. Jeg vil designe og skrive tekster som
+                er intuitive og enkle å bruke for alle sammen!
+              </p>
+
+              <h2>Innsiktsbank</h2>
+              <p>
+                For å holde det spennende lærer jeg stadig nye ting, og akkurat nå bygger jeg et system for å ta vare
+                på brukerinnsikt. Innsiktsarbeid er dyrt, og ofte blir resultatene liggende ubrukt i en mappe et sted.
+                Funnene kan brukes på tvers av prosjekter og produkter, så det gir mening å ta vare på dem og gjøre dem
+                gjenbrukbare! Jeg tester også ut KI for å kunne finne og kombinere brukerinnsikt.
+              </p>
+
+              <h2>Mentor</h2>
+              <p>
+                Hver uke er jeg frivillig mentor for UX-designere og produktledere på kveldstid. Jeg hjelper unge
+                designere med å finne fotfeste og bygge en spennende karriere, både på kort og lang sikt.
+              </p>
+              <p>
+                Jeg har også holdt noen lokale arrangementer – Figma Fridays – der jeg har hjulpet unge designere med å
+                samarbeide bedre og jobbe mer effektivt i Figma.
+              </p>
+
+              <figure>
+                <img
+                  src="/assets/about/portrait.png"
+                  alt="En kvinne i profil med lukkede øyne, lent mot en trestamme i skogen i gyllent kveldslys, i gul genser og rutete skjerf."
+                  width="1920"
+                  height="1272"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+
+              <h2>Personlig</h2>
+              <p>
+                Jeg har nok flere hobbyer enn andre har sokker. Jeg elsker havet -&gt; surfing, dykking, svømming i åpent
+                vann, padlebrett og seiling. Om vinteren går jeg på kunstløp og telemark. Jeg har hund og elsker å gå tur i
+                skogen, på landet og i fjellet. Jeg spiller fløyte og er glad i klassisk musikk. Reising har vært en stor
+                del av livet mitt, og Asia er alltid førstevalget. Om sommeren drar jeg sørover til den franske
+                vestkysten for å surfe.
+              </p>
+            </Fragment>
+          ) : (
+            <Fragment>
+              <h2>Roles and methodology</h2>
+              <div class="fact-groups">
+                <div>
+                  <h3>Roles</h3>
+                  <ul class="roles-list">
+                    <li>UI Designer</li>
+                    <li>UX Designer</li>
+                    <li>Agile Product Owner</li>
+                    <li>Scrum Master</li>
+                    <li>Web analyst</li>
+                    <li>Agile Coach</li>
+                    <li>Accessibility expert</li>
+                    <li>Developer (outdated)</li>
+                  </ul>
+                </div>
+              </div>
+              <h3>Passions</h3>
+              <p>
+                Learning new skills, user research, Agile, Figma design systems, accessibility, redesigning data heavy
+                complex tools, asynchronous work methods, travel and culture.
+              </p>
+
+              <h2>Work</h2>
+              <p>
+                I work for Vokser, a small but valuable company in Norway. I work as a UX lead - consultant — my clients
+                are mostly Norwegian and I do what I have done for the past 25 years. Designing easy-to-use digital tools
+                that make people's workday more efficient!
+              </p>
+
+              <h2>Design philosophy</h2>
+              <p>
+                When designing I will focus on creating simple, efficient and beautiful experiences that can be used by
+                all users. Reducing cognitive load wherever I can! After doing user testing for many years, I've met
+                users with sight and hearing disabilities, broken arms - young children, elderly and all in between. I
+                have also designed for senior experts working alongside newly hired juniors. I want to design and write
+                copy that is intuitive and easy to use for all of them!
+              </p>
+
+              <h2>Research repository</h2>
+              <p>
+                To keep things interesting I am adding new skills, currently focusing on building a system for storing
+                user research. Doing user research is expensive, often they sit vacant in a folder somewhere. Findings
+                are reusable across projects and products so it makes sense to preserve it and make it reusable! I am
+                also trying out AI to be able to find and combine user insights.
+              </p>
+
+              <h2>Mentor</h2>
+              <p>
+                Every week, during evenings I also volunteer as a mentor for UX Designers and Product managers. Helping
+                young designers find their footing and build an exciting career short- and long-term.
+              </p>
+              <p>
+                I've also done some local events - Figma Fridays - helping young designers be more collaborative and
+                efficient in Figma.
+              </p>
+
+              <figure>
+                <img
+                  src="/assets/about/portrait.png"
+                  alt="A woman in profile with her eyes closed, leaning against a tree trunk in a forest at golden hour, wearing a yellow jumper and a plaid scarf."
+                  width="1920"
+                  height="1272"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+
+              <h2>Personal</h2>
+              <p>
+                I probably have more hobbies than other people have socks. I love the ocean -&gt; Surfing, diving, open
+                water swimming, paddle boarding, and sailing. I do figure skating and free-heel skiing in winter. I have
+                a dog and love hiking forests, the countryside and mountains. I play the flute and love classical music.
+                Travelling has been a big part of my life, and Asia is always my first choice. During my summers I go
+                south to the French west coast for surfing.
+              </p>
+            </Fragment>
+          )
+        }
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .about-page {
+    row-gap: var(--space-4);
+  }
+
+  /*
+   * Same treatment as the homepage portrait: beside the intro with its
+   * bottom edge aligned to the last paragraph, here in the right rail so
+   * the intro text stays in the reading column. Below the rail breakpoint
+   * it follows the intro in the single column.
+   */
+  .about__media {
+    width: min(100%, var(--reading-max));
+    margin: 0 auto;
+  }
+
+  .about__media img {
+    max-width: min(100%, 20rem);
+  }
+
+  @media (min-width: 1100px) {
+    .about__copy,
+    .about__media {
+      align-self: end;
+    }
+
+    .about__media {
+      width: auto;
+      margin: 0;
+    }
+
+    .about__media img {
+      max-width: min(100%, 19rem);
+    }
+  }
+
+  .about__title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    column-gap: 1.25rem;
+    row-gap: 0.5rem;
+  }
+
+  .about__decor {
+    flex-shrink: 0;
+    height: clamp(6rem, 13vw, 9rem);
+    pointer-events: none;
+  }
+
+  @media (max-width: 767px) {
+    .about__decor {
+      height: clamp(4.5rem, 20vw, 6rem);
+    }
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+
+  .about__copy p {
+    max-width: var(--reading-max);
+  }
+
+  .about__copy p:last-child {
+    margin-bottom: 0;
+  }
+
+  .about-more {
+    margin-top: var(--section-gap);
+  }
+
+  .fact-groups {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .fact-groups h3 {
+    margin: 0;
+  }
+
+  .fact-groups ul {
+    margin: var(--heading-gap) 0 0;
+    padding-left: 1.2em;
+  }
+
+  .roles-list {
+    columns: 2;
+    column-gap: var(--space-4);
+    max-width: 26rem;
+  }
+
+  .roles-list li {
+    break-inside: avoid;
+  }
+</style>

@@ -28,6 +28,12 @@
   --space-6: 5.5rem;
   --space-7: 8rem;
 
+  /* Vertical rhythm for headings in running text. */
+  --heading-gap: var(--space-2);
+  --subsection-gap: var(--space-4);
+  --section-gap: var(--space-5);
+  --media-gap: var(--space-4);
+
   --gutter: clamp(1.2rem, 4.5vw, 4.75rem);
   --reading-w: min(600px, 65ch);
   --measure: var(--reading-w);
@@ -226,12 +232,51 @@ a:hover {
   max-width: var(--measure);
 }
 
+/*
+ * Spacing inside .prose is carried by margin-top alone. Bottom margins are
+ * zeroed so the rhythm is identical whether margins collapse (normal flow)
+ * or stack (the case-study grid, where .prose is display: contents):
+ * a small --heading-gap from a heading to its own content, and a larger
+ * --section-gap / --subsection-gap before the next H2 / H3.
+ */
+.prose > * {
+  margin-block: 0;
+}
+
 .prose > * + * {
   margin-top: 1.15em;
 }
 
+.prose > figure {
+  margin-inline: 0;
+}
+
+.prose > * + figure,
+.prose > figure + * {
+  margin-top: var(--media-gap);
+}
+
+.prose > figure + figure {
+  margin-top: var(--space-3);
+}
+
+.prose > h2 {
+  margin-top: var(--section-gap);
+}
+
+.prose > h3 {
+  margin-top: var(--subsection-gap);
+}
+
+.prose > :is(h2, h3) + * {
+  margin-top: var(--heading-gap);
+}
+
+.prose > :first-child {
+  margin-top: 0;
+}
+
 .prose h2 {
-  margin-top: 2.2em;
   font-family: var(--font-display);
   font-size: var(--step-2);
   font-weight: 500;
@@ -240,7 +285,6 @@ a:hover {
 }
 
 .prose h3 {
-  margin-top: 1.8em;
   font-family: var(--font-display);
   font-size: var(--step-1);
   font-weight: 500;
@@ -254,10 +298,6 @@ a:hover {
 .prose ul,
 .prose ol {
   padding-left: 1.2em;
-}
-
-.prose figure {
-  margin: 2.2em 0;
 }
 
 .prose figcaption {
@@ -331,35 +371,6 @@ a:hover {
   .case__body .prose > figure.media-feature {
     grid-column: 1 / 4;
   }
-}
-
-/* Editorial rhythm: figures get more room than plain paragraphs, a tier's
-   own figures form a family, and headings mark a clean break either side
-   of an image rather than reading as a caption for it. The :where() on
-   the tier selectors keeps these base rules low-specificity on purpose,
-   so the adjacency overrides below can win without repeating every tier. */
-.case__body .prose > figure:where(.media-wide) {
-  margin-block: 2.4em;
-}
-
-.case__body .prose > figure:where(.media-feature) {
-  margin-block: 3em;
-}
-
-.case__body .prose > figure:where(.media-reading, :not([class])) {
-  margin-block: 1.8em;
-}
-
-.case__body .prose > figure + figure {
-  margin-top: 1em;
-}
-
-.case__body .prose > :is(h2, h3) + figure {
-  margin-top: 1.4em;
-}
-
-.case__body .prose > figure + :is(h2, h3) {
-  margin-top: 2.6em;
 }
 
 .coming-soon {

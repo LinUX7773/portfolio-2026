@@ -1,0 +1,217 @@
+---
+import ProjectRow from '../components/ProjectRow.astro';
+import Flower from '../components/decor/Flower.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getProjects } from '../data/projects';
+import { site } from '../data/site';
+import { localePath, t, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const featured = (await getProjects(lang)).filter(({ entry }) => entry.data.featured);
+
+const copy = {
+  nb: {
+    description: 'Portefølje for Lin Bele Jacobsen, senior UX-designer og Product Owner i Norge.',
+    lede: 'Jeg designer løsninger som balanserer brukerbehov og forretningsmål – for det handler om mer enn å se bra ut!',
+    portraitAlt:
+      'Lin Bele Jacobsen smiler mot kamera og sitter i en mørk tretrapp med albuen på et trinn, i briller, svart genser og jeans.',
+    selectedWork: 'Utvalgte prosjekter',
+    intro: 'Jeg elsker å få kompliserte oppgaver til å føles overraskende enkle. Her er noen prosjekter der jeg fikk gjøre akkurat det.',
+    viewProjects: 'Se flere av prosjektene mine',
+    projects: 'Prosjekter',
+  },
+  en: {
+    description: 'Portfolio of Lin Bele Jacobsen, senior UX designer and product owner based in Norway.',
+    lede: 'Designing solutions that balance user needs & business goals — because it’s about more than just looking good!',
+    portraitAlt:
+      'Lin Bele Jacobsen smiling at the camera, sitting on a dark wooden staircase with one elbow resting on a step, wearing glasses, a black jumper and jeans.',
+    selectedWork: 'Selected work',
+    intro: 'I love making complicated tasks feel surprisingly easy. Here are a few projects where I got to do just that.',
+    viewProjects: 'View some of my projects',
+    projects: 'Projects',
+  },
+}[lang];
+---
+
+<BaseLayout description={copy.description}>
+  <main id="main">
+    <section class="masthead" aria-labelledby="name">
+      <div class="page-grid masthead__grid">
+        <div class="page-grid__wide masthead__heading">
+          <div class="masthead__text">
+            <p class="kicker">{t(lang).role}</p>
+            <h1 id="name">{site.name}</h1>
+            <p class="lede">{copy.lede}</p>
+          </div>
+          <figure class="masthead__media">
+            <img
+              src="/assets/home/portrait-stairs.png"
+              alt={copy.portraitAlt}
+              width="1036"
+              height="1519"
+              decoding="async"
+            />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="intro page-grid" aria-labelledby="intro-heading">
+      <div class="page-grid__reading intro__body">
+        <h2 id="intro-heading" class="kicker">{copy.selectedWork}</h2>
+        <p class="intro__text">{copy.intro}</p>
+        <p>
+          <a href={localePath(lang, '/projects')}>{copy.viewProjects}<span aria-hidden="true"> →</span></a>
+        </p>
+      </div>
+      <div class="page-grid__rail-right intro__decor" aria-hidden="true">
+        <Flower name="lonicera" />
+      </div>
+    </section>
+
+    <section class="work page-grid" aria-labelledby="work-heading">
+      <div class="page-grid__reading work__head">
+        <h2 id="work-heading">{copy.projects}</h2>
+      </div>
+      <div class="page-grid__reading work__list">
+        {
+          featured.map(({ entry, slug }, index) => (
+            <ProjectRow
+              href={localePath(lang, `/projects/${slug}`)}
+              index={index + 1}
+              title={entry.data.title}
+              summary={entry.data.summary}
+              topics={entry.data.topics}
+            />
+          ))
+        }
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .masthead {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(2.5rem, 7vw, 5rem) clamp(2.25rem, 5vw, 4rem);
+  }
+
+  /*
+   * Text and portrait share the masthead: stacked on small screens (text
+   * first, matching the DOM order), side by side from 768px with the
+   * portrait's bottom edge aligned to the lede.
+   */
+  .masthead__heading {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .masthead__media {
+    margin: 0;
+    max-width: 20rem;
+  }
+
+  @media (min-width: 768px) {
+    .masthead__heading {
+      grid-template-columns: minmax(0, 1fr) clamp(13rem, 24vw, 19rem);
+      align-items: end;
+      column-gap: var(--space-5);
+    }
+  }
+
+  /*
+   * At desktop widths the masthead composition (kicker, H1, lede, portrait)
+   * keeps the same internal layout but is sized to a wide-but-not-full-bleed
+   * box and centred in the three-zone grid, so it reads as flanked by rails
+   * rather than pinned to the left site gutter. Same width formula as the
+   * centred media-wide case-study images: reading column + one rail's
+   * worth of extra width, distributed evenly on both sides instead of
+   * only ever growing from the left edge.
+   */
+  @media (min-width: 1100px) {
+    .masthead__heading {
+      width: calc((var(--reading-w) + 100%) / 2 - var(--gutter));
+      margin-inline: auto;
+    }
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    font-weight: 300;
+    letter-spacing: -0.015em;
+    line-height: 1.02;
+  }
+
+  .lede {
+    margin: 0;
+    margin-top: var(--space-5);
+    max-width: 42ch;
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  .intro {
+    row-gap: var(--space-5);
+    padding-block: var(--space-6) 3.3rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .intro__decor {
+    justify-self: end;
+    height: clamp(6rem, 12vw, 9rem);
+    pointer-events: none;
+  }
+
+  @media (min-width: 1100px) {
+    .intro__decor {
+      justify-self: start;
+      align-self: center;
+    }
+  }
+
+  .intro__text {
+    margin: var(--heading-gap) 0 1.1rem;
+    font-size: var(--step-1);
+    line-height: 1.45;
+  }
+
+  .intro a {
+    font-family: var(--font-sans);
+    font-size: var(--step--1);
+  }
+
+  .work {
+    row-gap: var(--space-4);
+    padding-block: 3.3rem var(--space-6);
+  }
+
+  .work__head {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .work h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  @media (min-width: 768px) {
+    .lede {
+      max-width: 34ch;
+    }
+  }
+</style>
