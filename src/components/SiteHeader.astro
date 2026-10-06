@@ -19,7 +19,7 @@ const languageNames = { nb: 'Norsk', en: 'English' } as const;
       class="menu-toggle"
       type="button"
       aria-expanded="false"
-      aria-controls="primary-nav language-nav"
+      aria-controls="primary-nav"
       data-label-open={copy.menu}
       data-label-close={copy.close}
     >
@@ -50,8 +50,26 @@ const languageNames = { nb: 'Norsk', en: 'English' } as const;
       </ul>
     </nav>
 
-    <nav class="lang-switch" id="language-nav" aria-label={copy.language}>
-      <ul>
+    <!--
+      Language switch as a disclosure: a button showing the current flag
+      opens a short list of language links. Without JavaScript the list is
+      simply shown and the button stays hidden.
+    -->
+    <nav class="lang-switch" aria-label={copy.language}>
+      <button
+        class="lang-switch__toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="language-list"
+        aria-label={`${copy.language}: ${languageNames[lang]}`}
+        hidden
+      >
+        <LangFlag lang={lang} />
+        <svg class="lang-switch__chevron" viewBox="0 0 12 8" aria-hidden="true" focusable="false">
+          <path d="M1.5 1.75 6 6.25l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+      </button>
+      <ul class="lang-switch__list" id="language-list">
         {
           languages.map((code) => (
             <li>
@@ -85,11 +103,42 @@ const languageNames = { nb: 'Norsk', en: 'English' } as const;
 
   toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
 
-  // Escape closes the open mobile menu and returns focus to its button.
+  const langSwitch = header?.querySelector('.lang-switch');
+  const langToggle = langSwitch?.querySelector('.lang-switch__toggle');
+  const langList = langSwitch?.querySelector('.lang-switch__list');
+
+  const setLang = (open: boolean) => {
+    if (!(langToggle instanceof HTMLElement) || !(langList instanceof HTMLElement)) return;
+    langToggle.setAttribute('aria-expanded', String(open));
+    langList.hidden = !open;
+  };
+
+  if (langToggle instanceof HTMLElement && langList instanceof HTMLElement) {
+    langToggle.hidden = false;
+    langList.hidden = true;
+    langSwitch?.classList.add('is-enhanced');
+    langToggle.addEventListener('click', () => setLang(langToggle.getAttribute('aria-expanded') !== 'true'));
+
+    // Close when focus or a click moves anywhere outside the switch.
+    langSwitch?.addEventListener('focusout', (event) => {
+      if (!langSwitch.contains(event.relatedTarget as Node | null)) setLang(false);
+    });
+    document.addEventListener('click', (event) => {
+      if (!langSwitch?.contains(event.target as Node)) setLang(false);
+    });
+  }
+
+  // Escape closes whichever is open (language list first, then the mobile
+  // menu) and returns focus to the button that opened it.
   document.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape' || toggle?.getAttribute('aria-expanded') !== 'true') return;
-    setMenu(false);
-    if (toggle instanceof HTMLElement) toggle.focus();
+    if (event.key !== 'Escape') return;
+    if (langToggle instanceof HTMLElement && langToggle.getAttribute('aria-expanded') === 'true') {
+      setLang(false);
+      langToggle.focus();
+    } else if (toggle instanceof HTMLElement && toggle.getAttribute('aria-expanded') === 'true') {
+      setMenu(false);
+      toggle.focus();
+    }
   });
 
   // Shadow only once content is scrolled underneath the sticky header.
@@ -172,20 +221,78 @@ const languageNames = { nb: 'Norsk', en: 'English' } as const;
   }
 
   /*
-   * Language switch: flag + language name (in its own language) for both
-   * options. The current language is marked with the same underline as
-   * the current page in the menu, not by colour alone.
+   * Language switch. The button shows the current flag and a chevron; the
+   * list holds flag + language name (in its own language) for both
+   * options, with the current one underlined, not marked by colour alone.
    */
-  .lang-switch ul {
+  .lang-switch {
+    position: relative;
+  }
+
+  .lang-switch__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.75rem;
+    margin: 0;
+    padding: 0 0.25rem;
+    border: 0;
+    background: none;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+    cursor: pointer;
+  }
+
+  .lang-switch__toggle[hidden] {
+    display: none;
+  }
+
+  .lang-switch__toggle:hover {
+    color: var(--terracotta);
+  }
+
+  .lang-switch__chevron {
+    width: 0.7rem;
+    height: auto;
+    transition: transform 0.2s ease;
+  }
+
+  .lang-switch__toggle[aria-expanded='true'] .lang-switch__chevron {
+    transform: rotate(180deg);
+  }
+
+  .lang-switch__list {
     display: flex;
     gap: var(--space-3);
   }
 
+  .lang-switch.is-enhanced .lang-switch__list {
+    position: absolute;
+    top: calc(100% + 0.25rem);
+    right: 0;
+    z-index: 30;
+    flex-direction: column;
+    gap: 0;
+    min-width: 9.5rem;
+    padding-block: 0.35rem;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    box-shadow: 0 6px 18px -8px rgb(29 25 21 / 0.22);
+  }
+
+  .lang-switch__list[hidden] {
+    display: none;
+  }
+
   .lang-switch a {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 0.45em;
+    gap: 0.5em;
     color: var(--ink-soft);
+  }
+
+  .lang-switch.is-enhanced a {
+    padding: 0.5rem 0.9rem;
   }
 
   .lang-switch a:hover {
@@ -200,24 +307,37 @@ const languageNames = { nb: 'Norsk', en: 'English' } as const;
 
   @media (max-width: 1023px) {
     .site-header__inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      column-gap: var(--space-2);
+      row-gap: 0;
       min-height: 3.5rem;
     }
 
-    .nav,
-    .lang-switch {
+    .nav {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+
+    /*
+     * The name and the menu button get the full row height themselves, so
+     * they stay vertically centred in the same place when the open menu
+     * makes the header taller.
+     */
+    .wordmark,
+    .menu-toggle {
+      display: inline-flex;
+      align-items: center;
+      min-height: 3.5rem;
+    }
+
+    .nav {
       display: none;
-      flex-basis: 100%;
+      padding-bottom: 1rem;
     }
 
-    .menu-open .nav,
-    .menu-open .lang-switch {
+    .menu-open .nav {
       display: block;
-    }
-
-    .lang-switch {
-      margin-top: 0.25rem;
-      padding-block: 0.75rem 1rem;
-      border-top: 1px solid var(--rule);
     }
 
     .nav li + li {
