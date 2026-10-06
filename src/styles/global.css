@@ -1,13 +1,26 @@
 :root {
-  --paper: #f4eee6;
-  --paper-raised: #faf6f0;
-  --ink: #1d1915;
-  --ink-soft: #534a42;
-  --rule: #d8cdc0;
-  --blush: #e7d4c8;
-  --wine: #6f3a36;
-  --terracotta: #823a22;
-  --focus: #1d1915;
+  /* Dusty rose palette, taken from the flower illustrations (#a36b64),
+     deepened and kept greyish so it doesn't read as plain wine red.
+     All text pairs reach 7:1. */
+  --paper: #f6f2ef;
+  --paper-raised: #fcf9f7;
+  --ink: #211a19;
+  --ink-soft: #544744;
+  --rule: #e3d8d4;
+  --blush: #ebdad5;
+  --wine: #73423d;
+  --terracotta: #7e3a2a;
+  --focus: #211a19;
+  --media-ph-end: #dcc2bc;
+  --shadow-rgb: 33 26 25;
+
+  /* Header and footer surfaces. */
+  --chrome-bg: #5c3e3b;
+  --chrome-ink: #f7efeb;
+  --chrome-ink-soft: #eee2de;
+  --chrome-rule: #6f5250;
+  --chrome-hover: #f8dcc6;
+  --chrome-shadow: 0 2px 4px -1px rgb(var(--shadow-rgb) / 0.18), 0 12px 28px -10px rgb(var(--shadow-rgb) / 0.45);
 
   --font-display: 'Source Serif 4', 'Iowan Old Style', Georgia, serif;
   --font-serif: 'Source Serif 4', 'Iowan Old Style', Georgia, serif;
@@ -233,7 +246,7 @@ a:hover {
   place-items: center;
   min-height: clamp(12rem, 38vw, 26rem);
   background:
-    linear-gradient(180deg, var(--blush) 0%, #dcc4b4 100%);
+    linear-gradient(180deg, var(--blush) 0%, var(--media-ph-end) 100%);
   color: var(--wine);
   text-align: center;
   padding: var(--space-4);
