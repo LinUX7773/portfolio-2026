@@ -1,0 +1,15 @@
+---
+import CaseStudy from '../../../views/CaseStudy.astro';
+import { getProjects } from '../../../data/projects';
+
+export async function getStaticPaths() {
+  return (await getProjects('ko')).map(({ entry, slug }) => ({
+    params: { slug },
+    props: { project: entry },
+  }));
+}
+
+const { project } = Astro.props;
+---
+
+<CaseStudy lang="ko" project={project} />

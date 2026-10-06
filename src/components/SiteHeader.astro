@@ -1,14 +1,13 @@
 ---
 import LangFlag from './decor/LangFlag.astro';
 import { site } from '../data/site';
-import { getLang, languages, localePath, navItems, stripLang, t } from '../i18n';
+import { getLang, languageNames, languages, localePath, navItems, stripLang, t } from '../i18n';
 
 const lang = getLang(Astro.url);
 const copy = t(lang);
 const nav = navItems(lang);
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const pagePath = stripLang(Astro.url.pathname);
-const languageNames = { nb: 'Norsk', en: 'English' } as const;
 ---
 
 <header class="site-header">

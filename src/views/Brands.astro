@@ -7,7 +7,7 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-const nb = lang === 'nb';
+const tr = (nb: string, en: string, ko: string) => ({ nb, en, ko })[lang];
 const link = (path: string) => localePath(lang, path);
 
 interface BrandItem {
@@ -31,11 +31,16 @@ const copy = {
     description: 'Brands and organisations Lin Bele Jacobsen has worked with, grouped by industry.',
     intro: 'These are the brands and companies I have had the privilege to work with along my career.',
   },
+  ko: {
+    title: '고객사와 산업',
+    description: 'Lin Bele Jacobsen이 함께 일한 기업과 기관을 산업별로 정리했습니다.',
+    intro: '지금까지 경력을 쌓으며 함께 일할 수 있었던 기업과 기관들입니다.',
+  },
 }[lang];
 
 const groups: BrandGroup[] = [
   {
-    heading: nb ? 'Varehandel' : 'Retail',
+    heading: tr('Varehandel', 'Retail', '유통'),
     items: [
       { name: 'NorgesGruppen', href: link('/projects/the-grocer') },
       { name: 'Asko' },
@@ -43,46 +48,48 @@ const groups: BrandGroup[] = [
     ],
   },
   {
-    heading: nb ? 'Logistikk' : 'Logistics',
-    items: [{ name: 'Bring' }, { name: nb ? 'Posten Norge' : 'Norwegian Post' }],
+    heading: tr('Logistikk', 'Logistics', '물류'),
+    items: [{ name: 'Bring' }, { name: tr('Posten Norge', 'Norwegian Post', '노르웨이 우정청 (Posten Norge)') }],
   },
   {
-    heading: nb ? 'Offentlig sektor' : 'Public sector / Government',
+    heading: tr('Offentlig sektor', 'Public sector / Government', '공공 부문'),
     items: [
-      { name: nb ? 'Landbruksdirektoratet' : 'Directorate of Agriculture' },
+      { name: tr('Landbruksdirektoratet', 'Directorate of Agriculture', '노르웨이 농업청') },
       {
-        name: nb ? 'Meteorologisk institutt' : 'Norwegian Meteorological Institute',
+        name: tr('Meteorologisk institutt', 'Norwegian Meteorological Institute', '노르웨이 기상청'),
         href: link('/projects/the-weather-in-malawi'),
       },
-      { name: nb ? 'Posten Norge' : 'Norwegian Post' },
-      { name: nb ? 'Datatilsynet' : 'Norwegian Data Protection Authority (DPA)' },
-      { name: nb ? 'Skatteetaten' : 'Norwegian Tax Administration' },
+      { name: tr('Posten Norge', 'Norwegian Post', '노르웨이 우정청 (Posten Norge)') },
+      { name: tr('Datatilsynet', 'Norwegian Data Protection Authority (DPA)', '노르웨이 개인정보보호청') },
+      { name: tr('Skatteetaten', 'Norwegian Tax Administration', '노르웨이 국세청') },
       {
-        name: nb
-          ? 'Malawis direktorat for klimaendringer og meteorologi (DCCMS)'
-          : 'The Department of Climate Change and Meteorological Services of Malawi',
+        name: tr(
+          'Malawis direktorat for klimaendringer og meteorologi (DCCMS)',
+          'The Department of Climate Change and Meteorological Services of Malawi',
+          '말라위 기후변화·기상청 (DCCMS)',
+        ),
         href: link('/projects/the-weather-in-malawi'),
       },
     ],
   },
   {
-    heading: nb ? 'Utdanning og læring' : 'Education and learning',
+    heading: tr('Utdanning og læring', 'Education and learning', '교육과 학습'),
     items: [{ name: 'Pearson' }, { name: 'Fronter' }, { name: 'ADPList', href: link('/mentoring') }],
   },
   {
-    heading: nb ? 'Humanitære og ideelle organisasjoner' : 'Humanitarian organization / charity / NGOs',
+    heading: tr('Humanitære og ideelle organisasjoner', 'Humanitarian organization / charity / NGOs', '인도주의·비영리 단체'),
     items: [
-      { name: nb ? 'Røde Kors' : 'Red Cross' },
-      { name: nb ? 'Redd Barna' : 'Save the Children', href: link('/projects/the-weather-in-malawi') },
+      { name: tr('Røde Kors', 'Red Cross', '적십자') },
+      { name: tr('Redd Barna', 'Save the Children', '세이브더칠드런'), href: link('/projects/the-weather-in-malawi') },
       { name: 'Norcap' },
       {
-        name: nb ? 'Verdens meteorologiorganisasjon (FN)' : 'World Meteorological Organization (UN)',
+        name: tr('Verdens meteorologiorganisasjon (FN)', 'World Meteorological Organization (UN)', '세계기상기구 (UN)'),
         href: link('/projects/the-weather-in-malawi'),
       },
     ],
   },
   {
-    heading: nb ? 'Annet' : 'Other',
+    heading: tr('Annet', 'Other', '기타'),
     items: [
       { name: '1881.no', href: link('/projects/car-owner') },
       { name: 'VIRKE' },
@@ -93,7 +100,7 @@ const groups: BrandGroup[] = [
     ],
   },
   {
-    heading: nb ? 'IT-bransjen' : 'IT industry',
+    heading: tr('IT-bransjen', 'IT industry', 'IT 산업'),
     items: [
       { name: 'Tieto Evry' },
       { name: 'Buypass' },
@@ -108,14 +115,14 @@ const groups: BrandGroup[] = [
     ],
   },
   {
-    heading: nb ? 'Landbruk' : 'Farming',
+    heading: tr('Landbruk', 'Farming', '농업'),
     items: [
       { name: 'Mimiro', href: link('/projects/farmers') },
-      { name: nb ? 'Landbruksdirektoratet' : 'Directorate of Agriculture' },
+      { name: tr('Landbruksdirektoratet', 'Directorate of Agriculture', '노르웨이 농업청') },
     ],
   },
   {
-    heading: nb ? 'Telekom' : 'Telecom',
+    heading: tr('Telekom', 'Telecom', '통신'),
     items: [{ name: 'Telia' }],
   },
 ];
@@ -130,9 +137,9 @@ const groups: BrandGroup[] = [
 
       <div class="brand-wall">
         {
-          groups.map((group) => (
-            <section class="brand-group" aria-labelledby={`group-${group.heading.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`}>
-              <h2 id={`group-${group.heading.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`}>{group.heading}</h2>
+          groups.map((group, index) => (
+            <section class="brand-group" aria-labelledby={`group-${index}`}>
+              <h2 id={`group-${index}`}>{group.heading}</h2>
               <ul>
                 {group.items.map((item) => (
                   <li>

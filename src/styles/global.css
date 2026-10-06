@@ -56,6 +56,44 @@
   --header-h: 4.25rem;
 }
 
+/*
+ * Korean pages use NanumSquare (Naver, SIL OFL), self-hosted in
+ * /fonts/nanumsquare. Light covers headings and body text (300–400);
+ * Regular stands in for medium (500), so emphasis, labels and the menu
+ * get a little more weight without jumping to Bold. The web
+ * build covers the 2,350 common syllables; anything rarer falls back to
+ * the system Korean font.
+ */
+@font-face {
+  font-family: 'NanumSquare';
+  font-weight: 300 400;
+  font-display: swap;
+  src: url('/fonts/nanumsquare/NanumSquareL.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'NanumSquare';
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/nanumsquare/NanumSquareR.woff2') format('woff2');
+}
+
+:root:lang(ko) {
+  --font-display: 'NanumSquare', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-serif: 'NanumSquare', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-sans: 'NanumSquare', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+}
+
+/* Lines break between words, and Hangul isn't slanted (there's no italic). */
+:lang(ko) body {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+:root:lang(ko) :is(em, i, .lede) {
+  font-style: normal;
+}
+
 *,
 *::before,
 *::after {
