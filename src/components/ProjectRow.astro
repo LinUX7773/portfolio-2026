@@ -12,6 +12,12 @@ const { href, title, summary, topics = [] } = Astro.props;
 const copy = t(getLang(Astro.url));
 ---
 
+<!--
+  One link per project: the title. Its ::after stretches over the whole
+  row so the row is clickable, while screen readers and the tab order get
+  a single link named after the project. "Read case study" is a visual
+  cue only, hidden from assistive technology so it isn't read twice.
+-->
 <article class="project-row">
   <h2 class="project-row__title">
     <a href={href}>{title}</a>
@@ -22,24 +28,26 @@ const copy = t(getLang(Astro.url));
       <p class="project-row__topics">{topics.join(' · ')}</p>
     )
   }
-  <p class="project-row__cta">
-    <a href={href}>
-      {copy.readCaseStudy}<span aria-hidden="true"> →</span>
-      <span class="visually-hidden"> — {title}</span>
-    </a>
+  <p class="project-row__cta" aria-hidden="true">
+    {copy.readCaseStudy} <span class="project-row__arrow">→</span>
   </p>
 </article>
 
 <style>
+  /* --row-pad lets the hover tint reach a little past the text edge
+     without moving the text out of the reading column. */
   .project-row {
+    --row-pad: 0.75rem;
+    position: relative;
+    margin-inline: calc(var(--row-pad) * -1);
+    padding: 1.65rem var(--row-pad);
     border-top: 1px solid var(--rule);
-    padding-block: 1.65rem;
+    transition: background-color 0.2s ease;
   }
 
   .project-row:last-child {
     border-bottom: 1px solid var(--rule);
   }
-
 
   .project-row__title {
     margin: 0;
@@ -53,11 +61,13 @@ const copy = t(getLang(Astro.url));
   .project-row__title a {
     color: inherit;
     text-decoration: none;
+    transition: color 0.2s ease;
   }
 
-  .project-row__title a:hover,
-  .project-row__title a:focus-visible {
-    color: var(--terracotta);
+  .project-row__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
   }
 
   .project-row__summary {
@@ -75,10 +85,6 @@ const copy = t(getLang(Astro.url));
 
   .project-row__cta {
     margin: 0.85rem 0 0;
-  }
-
-  .project-row__cta a {
-    display: inline-block;
     padding-block: 0.4rem;
     font-family: var(--font-sans);
     font-size: var(--step--1);
@@ -87,9 +93,40 @@ const copy = t(getLang(Astro.url));
     color: var(--wine);
   }
 
-  .project-row__cta a:hover,
-  .project-row__cta a:focus-visible {
+  .project-row__arrow {
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+
+  /* Hover only where there's a real pointer, so it doesn't stick on touch. */
+  @media (hover: hover) {
+    .project-row:hover {
+      background-color: var(--paper-raised);
+    }
+
+    .project-row:hover .project-row__title a,
+    .project-row:hover .project-row__cta {
+      color: var(--terracotta);
+    }
+
+    .project-row:hover .project-row__arrow {
+      transform: translateX(0.25rem);
+    }
+  }
+
+  /* Keyboard focus outlines the whole clickable row, not just the title. */
+  .project-row__title a:focus-visible {
     color: var(--terracotta);
   }
 
+  @supports selector(:has(*)) {
+    .project-row__title a:focus-visible {
+      outline: none;
+    }
+
+    .project-row:has(.project-row__title a:focus-visible) {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+  }
 </style>

@@ -49,8 +49,11 @@
   box-sizing: border-box;
 }
 
+/* Keeps focused elements and anchor targets clear of the sticky header
+   (WCAG 2.4.11 Focus Not Obscured). */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + var(--space-3));
 }
 
 html:focus-within {
